@@ -1,8 +1,9 @@
 /// <reference path="../node_modules/@types/leaflet/index.d.ts" />
 var LeafletMap = /** @class */ (function () {
     function LeafletMap(p) {
+        var currentPosition;
+        var firstSetView = true;
         var map = new L.Map(p);
-        map.locate({ /*watch: true, */ setView: true, maxZoom: 18, enableHighAccuracy: true });
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 20,
             maxNativeZoom: 18,
@@ -12,13 +13,19 @@ var LeafletMap = /** @class */ (function () {
             tileSize: 512,
             zoomOffset: -1
         }).addTo(map);
+        setInterval(locate, 3000);
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
+        function locate() {
+            map.locate({ setView: firstSetView, maxZoom: 18, enableHighAccuracy: true });
+            firstSetView = false;
+        }
         function onLocationFound(e) {
+            if (currentPosition)
+                map.removeLayer(currentPosition);
             console.log("locating with", e.accuracy, "accuracy");
-            var radius = e.accuracy;
-            //L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
-            L.circle(e.latlng, radius).addTo(map);
+            var radius = e.accuracy / 2;
+            currentPosition = L.circle(e.latlng, radius).addTo(map);
         }
         function onLocationError(e) {
             alert(e.message);
