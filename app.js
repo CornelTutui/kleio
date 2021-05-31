@@ -5,8 +5,10 @@ var LeafletMap = /** @class */ (function () {
         var currentPositionCircle, currentPosition;
         var firstSetView = true;
         var delta = 0;
+        var keepCentered = true;
         document.getElementById("btnHome").addEventListener("click", function (e) { return onHome(); });
         var map = new L.Map(p);
+        map.on("drag", function () { keepCentered = false; });
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 20,
             maxNativeZoom: 18,
@@ -36,14 +38,16 @@ var LeafletMap = /** @class */ (function () {
             //currentPositionCircle = L.circle(e.latlng, e.accuracy / 2).addTo(map);
             currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
             currentPosition = L.marker(e.latlng).addTo(map);
-            delta += .0001;
-            var markerBounds = L.latLngBounds(e.latlng);
-            map.fitBounds(markerBounds);
+            delta += .001;
+            if (keepCentered)
+                map.panTo(e.latlng);
         }
         function onLocationError(e) {
             alert(e.message);
         }
         function onHome() {
+            delta = 0;
+            keepCentered = true;
             map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true });
         }
         ;
