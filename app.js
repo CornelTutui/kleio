@@ -28,7 +28,7 @@ var LeafletMap = /** @class */ (function () {
                 map.removeLayer(currentPosition);
             }
             console.log("locating with", e.accuracy, "accuracy");
-            document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy + "m";
+            document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy.toFixed(2) + "m";
             var pos = e.latlng;
             pos.lat += delta;
             pos.lng += delta;
