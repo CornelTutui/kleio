@@ -3,6 +3,7 @@ var LeafletMap = /** @class */ (function () {
     function LeafletMap(p) {
         var currentPosition;
         var firstSetView = true;
+        var delta = 0;
         var map = new L.Map(p);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 20,
@@ -24,8 +25,8 @@ var LeafletMap = /** @class */ (function () {
             if (currentPosition)
                 map.removeLayer(currentPosition);
             console.log("locating with", e.accuracy, "accuracy");
-            var radius = e.accuracy / 2;
-            currentPosition = L.circle(e.latlng, radius).addTo(map);
+            currentPosition = L.circle(e.latlng, e.accuracy / 2).addTo(map);
+            L.marker(e.latlng).addTo(map);
         }
         function onLocationError(e) {
             alert(e.message);
