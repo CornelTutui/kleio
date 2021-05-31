@@ -1,7 +1,8 @@
 /// <reference path="../node_modules/@types/leaflet/index.d.ts" />
+/// <reference path="../node_modules/@types/bootstrap/index.d.ts" />
 var LeafletMap = /** @class */ (function () {
     function LeafletMap(p) {
-        var currentPosition;
+        var currentPositionCircle, currentPosition;
         var firstSetView = true;
         var delta = 0;
         var map = new L.Map(p);
@@ -22,11 +23,19 @@ var LeafletMap = /** @class */ (function () {
             firstSetView = false;
         }
         function onLocationFound(e) {
-            if (currentPosition)
+            if (currentPositionCircle) {
+                map.removeLayer(currentPositionCircle);
                 map.removeLayer(currentPosition);
+            }
             console.log("locating with", e.accuracy, "accuracy");
-            currentPosition = L.circle(e.latlng, e.accuracy / 2).addTo(map);
-            L.marker(e.latlng).addTo(map);
+            document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy + "m";
+            var pos = e.latlng;
+            pos.lat += delta;
+            pos.lng += delta;
+            //currentPositionCircle = L.circle(e.latlng, e.accuracy / 2).addTo(map);
+            currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
+            currentPosition = L.marker(e.latlng).addTo(map);
+            delta += .0001;
         }
         function onLocationError(e) {
             alert(e.message);
