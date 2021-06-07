@@ -3,42 +3,82 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>RANSites</title>
-    <link rel="stylesheet" href="app.css" type="text/css" />
-    <script src="app.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-          crossorigin="" />
+    <title>Kleio</title>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""></script>
+    <link rel="stylesheet" href="kleio.css" type="text/css" />
+    <script src="kleio.js"></script>
 
-    <!-- use unpkg -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js" integrity="sha256-yDc0eil8GjWFKqN1OSzHSVCiuGghTosZCcRje4tj7iQ=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" integrity="sha256-BPfK9M5v34c2XP6p0cxVz1mUQLst0gTLk0mlc7kuodA=" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.js" integrity="sha256-0rM0BQq27Vj6qJXDTLdRB/rPrI1XNwSUo98pZtQr30M=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.css" integrity="sha256-BNdodQbWHpU3HT8xGhkEusT4ch4HEjvwzcbDcVuHR+E=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" integrity="sha256-PDJQdTN7dolQWDASIoBVrjkuOEaI137FI15sqI3Oxu8=" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.tilelayer.pouchdbcached@1.0.0/L.TileLayer.PouchDBCached.js" integrity="sha256-/+zxTvqZRFT4WEegR+plJoZPJGrcuqOKnQZ0RG6eN/E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.2/dist/pouchdb.js" integrity="sha256-xbdH52+GyEwoBKfsHmmMYCWILjv4KwZq0icZcjOzDAE=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.js" integrity="sha256-siofc4Uwjlra3YWkwthOn8Uj69cNN4aMug/iOHNiRgs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" integrity="sha256-XzD3RpaHPv7lzX9qt+2n1j5cWj48O24KsgaGYpKN8x8=" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-toolbar@0.4.0-alpha.2/dist/leaflet.toolbar.js" integrity="sha256-D786FM7MvDhViw9bYPPYnyP5Q+HsCRlMqzTZTdtcVnk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-toolbar@0.4.0-alpha.2/dist/leaflet.toolbar.css" integrity="sha256-Hq/lzTa412WZxxgNti0P4Prfg6SdXehbpqbC1b8yqzs=" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-draw-toolbar@0.3.0-alpha.1/dist/leaflet.draw-toolbar.js" integrity="sha256-E9lpTFK32F29mUdR8RpgYuzyZZY9Axz24GuDfNu2SHs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw-toolbar@0.3.0-alpha.1/dist/leaflet.draw-toolbar.css" integrity="sha256-JDuRlrwSDQD5J/qFwZifxi0wGfoz3K35QGN+hjKCKuE=" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/js/leaflet-sidebar.js" integrity="sha256-NQzshErvg7W7EhLN0umegsGFdejTaaAWM/vzq1yfSEg=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.css" integrity="sha256-FIZlRBXnW3JL4Pb7oAW2QNCGAG5uJqYlFbZb9qAKaso=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous">
+
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body, #map {
+            height: 100%;
+            font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+    </style>
+
 </head>
+
+
 <body>
-    <div id="content" style="height:100%; width:100%;"></div>
 
-    <nav class="navbar fixed-bottom navbar-light bg-light">
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <!--daca pun href, ca sa fie hand cursor, se face reload-->
-                    <a id="btnHome" style="font-size: 35px;" class="bi bi-house-fill nav-link">Home</a>
-                </li>
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
             </ul>
 
-            <ul class="navbar-nav ms-auto">
-                <li id="lblAccuracy" class="nav-item">
-                    <a class="nav-link">Accuracy: 0.00m</a>
-                </li>
-            </ul>
         </div>
-    </nav>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">
+                    takan!
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <p>muxo</p>
+
+            </div>
+
+            <div class="sidebar-pane" id="profile">
+                <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="map" class="sidebar-map"></div>
+
 </body>
 </html>
