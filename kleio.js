@@ -1,7 +1,5 @@
-class LeafletMap
-{
-	constructor(p)
-	{
+class LeafletMap {
+	constructor(p) {
 		var currentPositionCircle, currentPosition;
 		var firstSetView = true;
 		var delta = 0;
@@ -10,29 +8,11 @@ class LeafletMap
 		var moving = false;
 		var refreshInterval = 5000;
 
-		//document.getElementById("btnHome").addEventListener("click", (e) => onHome());
+		document.getElementById("btnHome").addEventListener("click", (e) => onHome());
 
 		var map = new L.Map(p);
 
 		var sidebar = L.control.sidebar('sidebar').addTo(map);
-
-		//var drawnItems = new L.FeatureGroup().addTo(map);
-		//new L.Toolbar2.DrawToolbar({
-		//	position: 'topleft'
-		//}).addTo(map);
-
-		//new L.Toolbar2.EditToolbar.Control({
-		//	position: 'topleft'
-		//}).addTo(map, drawnItems);
-
-		//map.on('draw:created', function (evt) {
-		//	var type = evt.layerType,
-		//		layer = evt.layer;
-
-		//	drawnItems.addLayer(layer);
-		//});
-
-
 
 		map.on("drag", () => { keepCentered = false; });
 		map.on("zoomend", () => { currentZoom = map.getZoom(); console.log(currentZoom); });
@@ -62,8 +42,7 @@ class LeafletMap
 			firstSetView = false;
 		}
 
-		function onLocationFound(e)
-		{
+		function onLocationFound(e) {
 			if (currentPositionCircle) {
 				map.removeLayer(currentPositionCircle);
 				map.removeLayer(currentPosition);
@@ -71,8 +50,18 @@ class LeafletMap
 
 			console.log("locating with", e.accuracy, "m accuracy");
 			document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy.toFixed(2) + "m";
+
+			if (window.navigator.onLine) {
+				document.getElementById("lblConnected").style.color = "black";
+				document.getElementById("lblConnected").innerText = "Online";
+			}
+			else {
+				document.getElementById("lblConnected").style.color = "gray";
+				document.getElementById("lblConnected").innerText = "Offline";
+			}
+
+
 			var pos = e.latlng;
-			//currentPositionCircle = L.circle(e.latlng, e.accuracy / 2).addTo(map);
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
 			currentPosition = L.marker(e.latlng).addTo(map);
 
@@ -88,14 +77,12 @@ class LeafletMap
 
 		}
 
-		function onLocationError(e)
-		{
+		function onLocationError(e) {
 			alert(e.message);
 		}
 
 
-		function onHome()
-		{
+		function onHome() {
 			delta = 0;
 			keepCentered = true;
 			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
@@ -106,8 +93,7 @@ class LeafletMap
 	}
 }
 
-window.onload = () =>
-{
+window.onload = () => {
 	const p = document.getElementById("map");
 	const map = new LeafletMap(p);
 };
