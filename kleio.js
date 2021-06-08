@@ -17,6 +17,18 @@ class LeafletMap {
 		map.on("drag", () => { keepCentered = false; });
 		map.on("zoomend", () => { currentZoom = map.getZoom(); console.log(currentZoom); });
 
+		window.addEventListener('offline', function (e)
+		{
+			document.getElementById("lblConnected").style.color = "black";
+			document.getElementById("lblConnected").innerText = "Online";
+	 });
+
+		window.addEventListener('offline', function (e)
+		{
+			document.getElementById("lblConnected").style.color = "gray";
+			document.getElementById("lblConnected").innerText = "Offline";
+		});
+
 		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
 			{
 				useCache: true,
@@ -50,16 +62,6 @@ class LeafletMap {
 
 			console.log("locating with", e.accuracy, "m accuracy");
 			document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy.toFixed(2) + "m";
-
-			if (window.navigator.onLine) {
-				document.getElementById("lblConnected").style.color = "black";
-				document.getElementById("lblConnected").innerText = "Online";
-			}
-			else {
-				document.getElementById("lblConnected").style.color = "gray";
-				document.getElementById("lblConnected").innerText = "Offline";
-			}
-
 
 			var pos = e.latlng;
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
