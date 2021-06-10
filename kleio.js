@@ -17,7 +17,7 @@ class LeafletMap {
 		map.on("drag", () => { keepCentered = false; });
 		map.on("zoomend", () => { currentZoom = map.getZoom(); console.log(currentZoom); });
 
-		window.addEventListener('offline', function (e)
+		window.addEventListener('online', function (e)
 		{
 			document.getElementById("lblConnected").style.color = "black";
 			document.getElementById("lblConnected").innerText = "Online";
