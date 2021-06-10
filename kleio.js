@@ -51,7 +51,7 @@ class LeafletMap {
 
 		function locate() {
 			map.locate({ setView: firstSetView, maxZoom: 18, enableHighAccuracy: true });
-			//firstSetView = false;
+			firstSetView = false;
 		}
 
 		function onLocationFound(e) {
