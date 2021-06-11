@@ -52,7 +52,7 @@ class LeafletMap
 
 
 
-		//document.getElementById("btnHome").addEventListener("click", (e) => onHome());
+		document.getElementById("btnHome").addEventListener("click", (e) => onHome());
 
 		var map = new L.Map(p);
 
