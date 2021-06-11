@@ -1,5 +1,46 @@
-class LeafletMap {
-	constructor(p) {
+class DB
+{
+
+	constructor()
+	{
+		//this.db = new PouchDB('SitesCoordinates');
+
+		//this.addCoord(1, 1);
+		//this.printCoords();
+	}
+
+	addCoord(lat, long)
+	{
+		var coord = {
+			_id: (Date.now()).toString(),
+			latitude: lat,
+			longitude: long
+		};
+
+		this.db.put(coord, function callback(err, result)
+		{
+			if (err)
+				console.log("error adding coord: ", err);
+			else
+				console.log("inserting ok");
+		});
+	}
+
+	printCoords()
+	{
+		this.db.allDocs({ include_docs: true, descending: true }, function (err, doc)
+		{
+			console.log(doc.rows);
+		});
+	}
+
+}
+
+class LeafletMap
+{
+
+	constructor(p)
+	{
 		var currentPositionCircle, currentPosition;
 		var firstSetView = true;
 		var delta = 0;
@@ -8,7 +49,10 @@ class LeafletMap {
 		var moving = false;
 		var refreshInterval = 5000;
 
-		document.getElementById("btnHome").addEventListener("click", (e) => onHome());
+
+
+
+		//document.getElementById("btnHome").addEventListener("click", (e) => onHome());
 
 		var map = new L.Map(p);
 
@@ -21,7 +65,7 @@ class LeafletMap {
 		{
 			document.getElementById("lblConnected").style.color = "black";
 			document.getElementById("lblConnected").innerText = "Online";
-	 });
+		});
 
 		window.addEventListener('offline', function (e)
 		{
@@ -49,12 +93,14 @@ class LeafletMap {
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
 
-		function locate() {
+		function locate()
+		{
 			map.locate({ setView: firstSetView, maxZoom: 18, enableHighAccuracy: true });
 			firstSetView = false;
 		}
 
-		function onLocationFound(e) {
+		function onLocationFound(e)
+		{
 			if (currentPositionCircle) {
 				map.removeLayer(currentPositionCircle);
 				map.removeLayer(currentPosition);
@@ -79,12 +125,14 @@ class LeafletMap {
 
 		}
 
-		function onLocationError(e) {
+		function onLocationError(e)
+		{
 			alert(e.message);
 		}
 
 
-		function onHome() {
+		function onHome()
+		{
 			delta = 0;
 			keepCentered = true;
 			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
@@ -95,8 +143,10 @@ class LeafletMap {
 	}
 }
 
-window.onload = () => {
+window.onload = () =>
+{
 	const p = document.getElementById("map");
 	const map = new LeafletMap(p);
+	const db = new DB;
 };
 
