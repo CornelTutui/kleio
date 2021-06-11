@@ -76,68 +76,12 @@
 			cursor: pointer;
 		}
 
-		input[type=submit]:hover
-		{
-				background-color: #45a049;
-		}
-
-		div1
-		{
-			border-radius: 5px;
-			background-color: #f2f2f2;
-			padding: 20px;
-		}
-
 	</style>
 
 </head>
 
 
 <body>
-
-	<!--<div id="sidebar" class="sidebar collapsed">-->
-	<!-- Nav tabs -->
-	<!--<div class="sidebar-tabs">
-		<ul role="tablist">
-			<li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-		</ul>
-
-	</div>-->
-	<!-- Tab panes -->
-	<!--<div class="sidebar-content">
-
-			<div class="sidebar-pane" id="home">
-				<h1 class="sidebar-header">
-					Kleio
-					<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-				</h1>
-
-				<div><i style="font-size: 20px; padding: 5%;" class="fa fa-wifi" id="lblConnected">Online</i></div>
-				<div><i style="font-size: 20px; padding: 5%;" class="fa fa-bullseye" id="lblAccuracy">Accuracy: 0.00m</i></div>
-				<div><i style="font-size: 20px; padding: 5%;" class="fa bi-house-fill" id="btnHome">Home</i></div>
-
-			</div>
-
-
-
-
-			<div class="sidebar-pane" id="profile">
-				<h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-			</div>
-
-			<div class="sidebar-pane" id="coords">
-				<h1 class="sidebar-header">
-					Coordinates
-				</h1>
-
-			</div>
-
-
-		</div>
-	</div>-->
-
-
-
 
 
 	<div id="sidebar" class="sidebar collapsed">
@@ -159,10 +103,12 @@
 			<div class="sidebar-pane" id="home">
 				<h1 class="sidebar-header">
 					Kleio
-			</h1>
+					<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+				</h1>
 
 				<div><span style="font-size: 20px; padding: 5%;" class="fa fa-wifi" id="lblConnected">Online</span></div>
 				<div><span style="font-size: 20px; padding: 5%;" class="fa fa-bullseye" id="lblAccuracy">Accuracy: 0.00m</span></div>
+				<div><span style="font-size: 20px; padding: 5%;" class="fa fa-street-view" id="lblCrtLocation">Current location: 0.00000, 0.00000</span></div>
 				<div><span style="font-size: 20px; padding: 5%;" class="fa bi-house-fill" id="btnHome">Home</span></div>
 
 			</div>
@@ -172,20 +118,13 @@
 
 				<div>
 					<form>
-						<label for="fname">First Name</label>
-						<input type="text" id="fname" name="firstname" placeholder="Your name..">
+						<label for="fname" style="font-size: 20px;">Latitude</label>
+						<input type="text" id="fname" name="firstname" placeholder="...">
 
-						<label for="lname">Last Name</label>
-						<input type="text" id="lname" name="lastname" placeholder="Your last name..">
+						<label for="lname" style="font-size: 20px;">Longitude</label>
+						<input type="text" id="lname" name="lastname" placeholder="..">
 
-						<label for="country">Country</label>
-						<select id="country" name="country">
-							<option value="australia">Australia</option>
-							<option value="canada">Canada</option>
-							<option value="usa">USA</option>
-						</select>
-
-						<input type="submit" value="Submit">
+						<input type="button" id ="btnSaveCoords" value="Save">
 					</form>
 				</div>
 

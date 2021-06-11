@@ -47,12 +47,12 @@ class LeafletMap
 		var keepCentered = true;
 		var currentZoom = 0;
 		var moving = false;
-		var refreshInterval = 5000;
-
-
+		var refreshInterval = 10000;
 
 
 		document.getElementById("btnHome").addEventListener("click", (e) => onHome());
+
+		document.getElementById("btnSaveCoords").addEventListener("click", (e) => onSaveCoords());
 
 		var map = new L.Map(p);
 
@@ -89,6 +89,7 @@ class LeafletMap
 		).addTo(map);
 
 		setInterval(locate, refreshInterval);
+		locate();
 
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
@@ -123,6 +124,19 @@ class LeafletMap
 				map.panTo(e.latlng);
 			}
 
+
+			navigator.geolocation.getCurrentPosition(function (location)
+			{
+				httpGetAsync("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.coords.latitude + "&lon=" + location.coords.longitude, function (data)
+				{
+					var crtLoc = JSON.parse(data).display_name.toString();
+					document.getElementById("lblCrtLocation").textContent = "Current location: " + crtLoc + "(" + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + ")";
+				}
+				);
+
+			}
+			);
+
 		}
 
 		function onLocationError(e)
@@ -138,7 +152,30 @@ class LeafletMap
 			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
 			map.setZoom(currentZoom);
 			console.log(currentZoom);
+		}
+
+
+		function onSaveCoords()
+		{
+			delta = 0;
+			keepCentered = true;
+			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
+			map.setZoom(currentZoom);
+			console.log(currentZoom);
 		};
+
+		function httpGetAsync(theUrl, callback)
+		{
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.onreadystatechange = function ()
+			{
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					callback(xmlHttp.responseText);
+			}
+			xmlHttp.open("GET", theUrl, true);
+			xmlHttp.send(null);
+		}
+
 
 	}
 }
