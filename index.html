@@ -89,7 +89,8 @@
 		<div class="sidebar-tabs">
 			<ul role="tablist">
 				<li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-				<li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+				<li><a href="#coords" role="tab"><i class="fa fa-bullseye"></i></a></li>
+				<li><a href="#table" role="tab"><i class="fa fa-database"></i></a></li>
 			</ul>
 
 			<ul role="tablist">
@@ -113,18 +114,29 @@
 
 			</div>
 
-			<div class="sidebar-pane" id="profile">
+			<div class="sidebar-pane" id="coords">
 				<h1 class="sidebar-header">Sites<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 
 				<div>
 					<form>
 						<label for="fname" style="font-size: 20px;">Latitude</label>
-						<input type="text" id="fname" name="firstname" placeholder="...">
+						<input type="text" id="iLat" name="firstname" placeholder="...">
 
 						<label for="lname" style="font-size: 20px;">Longitude</label>
-						<input type="text" id="lname" name="lastname" placeholder="..">
+						<input type="text" id="iLong" name="lastname" placeholder="..">
 
-						<input type="button" id ="btnSaveCoords" value="Save">
+						<input type="button" id="btnSaveCoords" value="Save">
+					</form>
+				</div>
+
+			</div>
+
+			<div class="sidebar-pane" id="table">
+				<h1 class="sidebar-header">Sites<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+
+				<div>
+					<form>
+						<input type="button" id="btnDeleteCoords" value="Delete table">
 					</form>
 				</div>
 

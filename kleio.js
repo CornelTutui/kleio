@@ -3,14 +3,14 @@ class DB
 
 	constructor()
 	{
-		//this.db = new PouchDB('SitesCoordinates');
-
-		//this.addCoord(1, 1);
-		//this.printCoords();
+		this.db = new PouchDB('SitesCoordinates');
 	}
 
 	addCoord(lat, long)
 	{
+		//if DB not exists, create it, else update it
+		this.db = new PouchDB('SitesCoordinates');
+
 		var coord = {
 			_id: (Date.now()).toString(),
 			latitude: lat,
@@ -26,6 +26,18 @@ class DB
 		});
 	}
 
+	destroy()
+	{
+		this.db.destroy().then(function (response)
+		{
+			console.log("DB deleted");
+		}).catch(function (err)
+		{
+			console.log(err);
+		});
+	}
+
+
 	printCoords()
 	{
 		this.db.allDocs({ include_docs: true, descending: true }, function (err, doc)
@@ -34,12 +46,28 @@ class DB
 		});
 	}
 
+	readCoords(fct)
+	{
+		this.db.allDocs({include_docs: true}).then(function (result)
+		{
+			var docs = result.rows.map(function (row)
+			{
+				return row.doc;
+			});
+			fct(docs);
+			return docs;
+		}).catch(function (err)
+		{
+			console.log(err);
+		});
+	}
+
 }
 
-class LeafletMap
+class Kleio
 {
 
-	constructor(p)
+	constructor()
 	{
 		var currentPositionCircle, currentPosition;
 		var firstSetView = true;
@@ -48,18 +76,22 @@ class LeafletMap
 		var currentZoom = 0;
 		var moving = false;
 		var refreshInterval = 10000;
+		var sitesDiameter = 50;
 
+		var db = new DB;
 
 		document.getElementById("btnHome").addEventListener("click", (e) => onHome());
 
 		document.getElementById("btnSaveCoords").addEventListener("click", (e) => onSaveCoords());
 
-		var map = new L.Map(p);
+		document.getElementById("btnDeleteCoords").addEventListener("click", (e) => onDeleteCoords());
+
+		var map = new L.Map(document.getElementById("map"));
 
 		var sidebar = L.control.sidebar('sidebar').addTo(map);
 
 		map.on("drag", () => { keepCentered = false; });
-		map.on("zoomend", () => { currentZoom = map.getZoom(); console.log(currentZoom); });
+		map.on("zoomend", () => { currentZoom = map.getZoom();});
 
 		window.addEventListener('online', function (e)
 		{
@@ -81,7 +113,7 @@ class LeafletMap
 				maxZoom: 20,
 				maxNativeZoom: 18,
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-					'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+					'Imagery <a href="https://www.mapbox.com/">Mapbox</a>',
 				id: 'mapbox/streets-v11',
 				tileSize: 512,
 				zoomOffset: -1
@@ -107,7 +139,6 @@ class LeafletMap
 				map.removeLayer(currentPosition);
 			}
 
-			console.log("locating with", e.accuracy, "m accuracy");
 			document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy.toFixed(2) + "m";
 
 			var pos = e.latlng;
@@ -130,7 +161,7 @@ class LeafletMap
 				httpGetAsync("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.coords.latitude + "&lon=" + location.coords.longitude, function (data)
 				{
 					var crtLoc = JSON.parse(data).display_name.toString();
-					document.getElementById("lblCrtLocation").textContent = "Current location: " + crtLoc + "(" + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + ")";
+					document.getElementById("lblCrtLocation").textContent = "Current location: " + crtLoc + " ( " + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + " )";
 				}
 				);
 
@@ -151,18 +182,26 @@ class LeafletMap
 			keepCentered = true;
 			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
 			map.setZoom(currentZoom);
-			console.log(currentZoom);
 		}
 
 
 		function onSaveCoords()
 		{
-			delta = 0;
-			keepCentered = true;
-			map.locate({ setView: true, maxZoom: currentZoom, enableHighAccuracy: true });
-			map.setZoom(currentZoom);
-			console.log(currentZoom);
+			db.addCoord(document.getElementById("iLat").value, document.getElementById("iLong").value);
+			db.printCoords();
+
+			db.readCoords(function (docs)
+			{
+				for (var i = 0; i < docs.length; ++i) {
+					addSite(docs[i].latitude, docs[i].longitude);
+				}
+			});
 		};
+
+		function onDeleteCoords()
+		{
+			db.destroy();
+		}
 
 		function httpGetAsync(theUrl, callback)
 		{
@@ -177,13 +216,23 @@ class LeafletMap
 		}
 
 
+		function addSite(lat, long)
+		{
+			L.circle(L.latLng(lat, long),
+				{
+					color: 'red',
+					fillColor: 'red',
+					fillOpacity: 1,
+					radius: sitesDiameter
+				}
+			).addTo(map);
+		}
+
 	}
 }
 
 window.onload = () =>
 {
-	const p = document.getElementById("map");
-	const map = new LeafletMap(p);
-	const db = new DB;
+	const app = new Kleio;
 };
 
