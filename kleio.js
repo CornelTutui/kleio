@@ -75,7 +75,7 @@ class Kleio
 		var keepCentered = true;
 		var currentZoom = 0;
 		var moving = false;
-		var refreshInterval = 10000;
+		var refreshInterval = 3000;
 		var sitesDiameter = 50;
 
 		var db = new DB;
@@ -96,13 +96,13 @@ class Kleio
 		window.addEventListener('online', function (e)
 		{
 			document.getElementById("lblConnected").style.color = "black";
-			document.getElementById("lblConnected").innerText = "Online";
+			document.getElementById("lblConnected").innerHTML = "<b>Online</b>";
 		});
 
 		window.addEventListener('offline', function (e)
 		{
 			document.getElementById("lblConnected").style.color = "gray";
-			document.getElementById("lblConnected").innerText = "Offline";
+			document.getElementById("lblConnected").innerHTML = "<b>Offline</b>";
 		});
 
 		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
@@ -139,7 +139,7 @@ class Kleio
 				map.removeLayer(currentPosition);
 			}
 
-			document.getElementById("lblAccuracy").textContent = "Accuracy: " + e.accuracy.toFixed(2) + "m";
+			document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
 
 			var pos = e.latlng;
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
@@ -161,7 +161,7 @@ class Kleio
 				httpGetAsync("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.coords.latitude + "&lon=" + location.coords.longitude, function (data)
 				{
 					var crtLoc = JSON.parse(data).display_name.toString();
-					document.getElementById("lblCrtLocation").textContent = "Current location: " + crtLoc + " ( " + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + " )";
+					document.getElementById("lblCrtLocation").innerHTML = "<b>Current location: </b><br>" + crtLoc + " ( " + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + " )";
 				}
 				);
 
