@@ -130,6 +130,7 @@ class Kleio
 					'Imagery <a href="https://www.mapbox.com/">Mapbox</a>',
 				id: 'mapbox/streets-v11',
 				tileSize: 512,
+				reuseTiles: true,
 				zoomOffset: -1
 			}
 		).addTo(map);
@@ -153,7 +154,7 @@ class Kleio
 				map.removeLayer(currentPosition);
 			}
 
-			//document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
+			document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
 
 			var pos = e.latlng;
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
