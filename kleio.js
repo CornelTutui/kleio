@@ -91,7 +91,9 @@ class Kleio
 
 		map.on("dragend", (e) =>
 		{
-			if (e.distance > 1000)
+			if (!e.target._lastCenter) return;
+			console.log(distance(e.target._lastCenter.lat, e.target._lastCenter.lng, map.getCenter().lat, map.getCenter().lng));
+			if (distance(e.target._lastCenter.lat, e.target._lastCenter.lng, map.getCenter().lat, map.getCenter().lng) > .05)
 				keepCentered = false;
 		});
 
@@ -143,7 +145,7 @@ class Kleio
 				map.removeLayer(currentPosition);
 			}
 
-			document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
+			//document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
 
 			var pos = e.latlng;
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
