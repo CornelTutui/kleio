@@ -76,6 +76,8 @@ class Kleio
 		var refreshInterval = 3000;
 		var sitesDiameter = 50;
 		var oldLat = 0, oldLong = 0;
+		var oldCenter;
+
 
 		var db = new DB;
 
@@ -89,11 +91,18 @@ class Kleio
 
 		var sidebar = L.control.sidebar('sidebar').addTo(map);
 
+		map.on("dragstart", (e) =>
+		{
+			oldCenter = map.getCenter();
+		});
+
 		map.on("dragend", (e) =>
 		{
-			console.log(e.target.dragging._draggable._newPos.distanceTo(e.target.dragging._draggable._startPos));
-			if(e.target.dragging._draggable._newPos.distanceTo(e.target.dragging._draggable._startPos) > 100)
+			var center = map.getCenter();
+			console.log(distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng));
+			if (distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng) > .01)
 				keepCentered = false;
+			oldCenter = center;
 		});
 
 		map.on("zoomend", () => { currentZoom = map.getZoom();});
@@ -250,8 +259,12 @@ class Kleio
 	}
 }
 
-window.onload = () =>
+//window.onload = () =>
+//{
+//	const app = new Kleio;
+//};
+
+document.addEventListener('DOMContentLoaded', (e) =>
 {
 	const app = new Kleio;
-};
-
+})
