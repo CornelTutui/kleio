@@ -91,9 +91,8 @@ class Kleio
 
 		map.on("dragend", (e) =>
 		{
-			if (!e.target._lastCenter) return;
-			console.log(distance(e.target._lastCenter.lat, e.target._lastCenter.lng, map.getCenter().lat, map.getCenter().lng));
-			if (distance(e.target._lastCenter.lat, e.target._lastCenter.lng, map.getCenter().lat, map.getCenter().lng) > .05)
+			console.log(e.target.dragging._draggable._newPos.distanceTo(e.target.dragging._draggable._startPos));
+			if(e.target.dragging._draggable._newPos.distanceTo(e.target.dragging._draggable._startPos) > 100)
 				keepCentered = false;
 		});
 
