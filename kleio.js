@@ -17,21 +17,19 @@ class DB
 			longitude: long
 		};
 
-		this.db.put(coord, function callback(err, result)
+		this.db.put(coord, (err, result) =>
 		{
 			if (err)
 				console.log("error adding coord: ", err);
-			else
-				console.log("inserting ok");
 		});
 	}
 
 	destroy()
 	{
-		this.db.destroy().then(function (response)
+		this.db.destroy().then( (response) =>
 		{
 			console.log("DB deleted");
-		}).catch(function (err)
+		}).catch( (err) =>
 		{
 			console.log(err);
 		});
@@ -40,7 +38,7 @@ class DB
 
 	printCoords()
 	{
-		this.db.allDocs({ include_docs: true, descending: true }, function (err, doc)
+		this.db.allDocs({ include_docs: true, descending: true }, (err, doc) =>
 		{
 			console.log(doc.rows);
 		});
@@ -48,15 +46,15 @@ class DB
 
 	readCoords(fct)
 	{
-		this.db.allDocs({include_docs: true}).then(function (result)
+		this.db.allDocs({ include_docs: true }).then((result) =>
 		{
-			var docs = result.rows.map(function (row)
+			var docs = result.rows.map((row) =>
 			{
 				return row.doc;
 			});
 			fct(docs);
 			return docs;
-		}).catch(function (err)
+		}).catch((err) =>
 		{
 			console.log(err);
 		});
@@ -77,6 +75,7 @@ class Kleio
 		var moving = false;
 		var refreshInterval = 3000;
 		var sitesDiameter = 50;
+		var oldLat = 0, oldLong = 0;
 
 		var db = new DB;
 
@@ -90,16 +89,21 @@ class Kleio
 
 		var sidebar = L.control.sidebar('sidebar').addTo(map);
 
-		map.on("drag", () => { keepCentered = false; });
+		map.on("dragend", (e) =>
+		{
+			if (e.distance > 1000)
+				keepCentered = false;
+		});
+
 		map.on("zoomend", () => { currentZoom = map.getZoom();});
 
-		window.addEventListener('online', function (e)
+		window.addEventListener('online', (e) =>
 		{
 			document.getElementById("lblConnected").style.color = "black";
 			document.getElementById("lblConnected").innerHTML = "<b>Online</b>";
 		});
 
-		window.addEventListener('offline', function (e)
+		window.addEventListener('offline', (e) =>
 		{
 			document.getElementById("lblConnected").style.color = "gray";
 			document.getElementById("lblConnected").innerHTML = "<b>Offline</b>";
@@ -156,9 +160,17 @@ class Kleio
 			}
 
 
-			navigator.geolocation.getCurrentPosition(function (location)
+			navigator.geolocation.getCurrentPosition((location) =>
 			{
-				httpGetAsync("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.coords.latitude + "&lon=" + location.coords.longitude, function (data)
+				var d = distance(location.coords.latitude, location.coords.longitude, oldLat, oldLong);
+				oldLat = location.coords.latitude;
+				oldLong = location.coords.longitude;
+
+				//daca nu ma misc prea mult, nu aplezez APIul, evit ban
+				if (d < .01) 
+					return;
+
+				httpGetAsync("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + location.coords.latitude + "&lon=" + location.coords.longitude, (data) =>
 				{
 					var crtLoc = JSON.parse(data).display_name.toString();
 					document.getElementById("lblCrtLocation").innerHTML = "<b>Current location: </b><br>" + crtLoc + " ( " + location.coords.latitude.toFixed(5) + ", " + location.coords.longitude.toFixed(5) + " )";
@@ -168,6 +180,11 @@ class Kleio
 			}
 			);
 
+		}
+
+		function distance(lat1, long1, lat2, long2)
+		{
+			return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(long1 - long2, 2));
 		}
 
 		function onLocationError(e)
@@ -190,7 +207,7 @@ class Kleio
 			db.addCoord(document.getElementById("iLat").value, document.getElementById("iLong").value);
 			db.printCoords();
 
-			db.readCoords(function (docs)
+			db.readCoords((docs) =>
 			{
 				for (var i = 0; i < docs.length; ++i) {
 					addSite(docs[i].latitude, docs[i].longitude);
@@ -206,8 +223,9 @@ class Kleio
 		function httpGetAsync(theUrl, callback)
 		{
 			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.onreadystatechange = function ()
+			xmlHttp.onreadystatechange = () =>
 			{
+				var response;
 				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
 					callback(xmlHttp.responseText);
 			}
