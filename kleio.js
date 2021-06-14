@@ -99,9 +99,7 @@ class Kleio
 		map.on("dragend", (e) =>
 		{
 			var center = map.getCenter();
-			console.log(distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng));
-			document.getElementById("lblAccuracy").innerHTML = "<b>Dist: </b><br>" + distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng) + "m";
-			if (distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng) > .01)
+			if (distance(oldCenter.lat, oldCenter.lng, center.lat, center.lng) > .001)
 				keepCentered = false;
 			oldCenter = center;
 		});
@@ -155,7 +153,7 @@ class Kleio
 				map.removeLayer(currentPosition);
 			}
 
-//			document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
+			document.getElementById("lblAccuracy").innerHTML = "<b>Accuracy: </b><br>" + e.accuracy.toFixed(2) + "m";
 
 			var pos = e.latlng;
 			currentPositionCircle = L.circle(pos, e.accuracy / 2).addTo(map);
@@ -168,6 +166,7 @@ class Kleio
 			}
 
 			if (keepCentered) {
+				console.log(e.latlng);
 				map.panTo(e.latlng);
 			}
 
