@@ -3,7 +3,7 @@ class DB
 
 	constructor()
 	{
-		this.db = new PouchDB('SitesCoordinates');
+		this.db = new PouchDB("https://github.com/CornelTutui/test/SitesCoordinates");
 	}
 
 	addCoord(lat, long)
