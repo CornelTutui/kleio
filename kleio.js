@@ -40,6 +40,7 @@ class DB
 	{
 		this.db.allDocs({ include_docs: true, descending: true }, (err, doc) =>
 		{
+			alert(doc.rows);
 			console.log(doc.rows);
 		});
 	}
