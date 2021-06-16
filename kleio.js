@@ -3,13 +3,13 @@ class DB
 
 	constructor()
 	{
-		this.db = new PouchDB("https://github.com/CornelTutui/test/SitesCoordinates");
+		this.db = new PouchDB("https://github.com/CornelTutui/test/SitesCoordinates", { skip_setup: true });
 	}
 
 	addCoord(lat, long)
 	{
 		//if DB not exists, create it, else update it
-		this.db = new PouchDB('SitesCoordinates');
+		this.db = new PouchDB("https://github.com/CornelTutui/test/SitesCoordinates", { skip_setup: true });
 
 		var coord = {
 			_id: (Date.now()).toString(),
@@ -61,6 +61,20 @@ class DB
 		});
 	}
 
+
+	checkExists()
+	{
+		this.db.info()
+			.then(() =>
+			{
+				return true;
+			})
+			.catch(e =>
+			{
+				return false;
+			});
+	}
+
 }
 
 class Kleio
@@ -87,6 +101,7 @@ class Kleio
 		document.getElementById("btnSaveCoords").addEventListener("click", (e) => onSaveCoords());
 
 		document.getElementById("btnDeleteCoords").addEventListener("click", (e) => onDeleteCoords());
+		document.getElementById("btnCheck").addEventListener("click", (e) => onCheckTable());
 
 		var map = new L.Map(document.getElementById("map"));
 
@@ -167,7 +182,6 @@ class Kleio
 			}
 
 			if (keepCentered) {
-				console.log(e.latlng);
 				map.panTo(e.latlng);
 			}
 
@@ -232,6 +246,14 @@ class Kleio
 			db.destroy();
 		}
 
+		function onCheckTable()
+		{
+			if (db.checkExists())
+				alert("exists");
+			else
+				alert("not exists");
+		}
+
 		function httpGetAsync(theUrl, callback)
 		{
 			var xmlHttp = new XMLHttpRequest();
@@ -260,11 +282,6 @@ class Kleio
 
 	}
 }
-
-//window.onload = () =>
-//{
-//	const app = new Kleio;
-//};
 
 document.addEventListener('DOMContentLoaded', (e) =>
 {
